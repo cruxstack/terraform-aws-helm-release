@@ -45,8 +45,8 @@ run "defaults" {
       helm_release.this[0].name == "metrics-server",
       helm_release.this[0].namespace == "metrics-server",
       helm_release.this[0].create_namespace == false,
-      helm_release.this[0].set == null,
-      helm_release.this[0].set_list == null,
+      length(helm_release.this[0].set) == 0,
+      length(helm_release.this[0].set_list) == 0,
       helm_release.this[0].postrender == null,
     ])
     error_message = "a bare release should plan only helm_release with no set values, namespace, or post-renderer"
@@ -131,7 +131,7 @@ run "irsa_without_annotation" {
   }
 
   assert {
-    condition     = helm_release.this[0].set == null
+    condition     = length(helm_release.this[0].set) == 0
     error_message = "the role ARN should not be set when the annotation is disabled"
   }
 }
@@ -149,10 +149,10 @@ run "namespace_with_kubernetes" {
       length(kubernetes_namespace_v1.default) == 1,
       kubernetes_namespace_v1.default[0].metadata[0].name == "metrics-server",
       kubernetes_namespace_v1.default[0].metadata[0].labels == tomap({ team = "platform" }),
-      kubernetes_namespace_v1.default[0].metadata[0].annotations == null,
+      length(kubernetes_namespace_v1.default[0].metadata[0].annotations) == 0,
       helm_release.this[0].create_namespace == false,
     ])
-    error_message = "the namespace should be created by the Kubernetes provider, with empty maps left null"
+    error_message = "the namespace should be created by the Kubernetes provider"
   }
 }
 

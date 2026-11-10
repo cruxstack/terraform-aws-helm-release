@@ -264,15 +264,14 @@ variable "set_list" {
 }
 
 variable "set_sensitive" {
-  description = "Chart values set by key path and redacted from the plan. They are still stored in state."
+  description = "Chart values set by key path. The provider redacts the values from plans but stores them in state."
   type = list(object({
     name  = string
     value = string
     type  = optional(string)
   }))
-  default   = []
-  nullable  = false
-  sensitive = true
+  default  = []
+  nullable = false
 }
 
 variable "set_wo" {
