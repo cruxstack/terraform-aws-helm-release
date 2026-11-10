@@ -64,8 +64,8 @@ resource "kubernetes_namespace_v1" "default" {
 
   metadata {
     name        = var.kubernetes_namespace
-    annotations = length(var.kubernetes_namespace_annotations) > 0 ? var.kubernetes_namespace_annotations : null
-    labels      = length(var.kubernetes_namespace_labels) > 0 ? var.kubernetes_namespace_labels : null
+    annotations = var.kubernetes_namespace_annotations
+    labels      = var.kubernetes_namespace_labels
   }
 
   # keep the role until finalizers that need it have run
@@ -123,9 +123,9 @@ resource "helm_release" "this" {
   wait_for_jobs              = var.wait_for_jobs
 
   values          = var.values
-  set             = length(local.set) > 0 ? local.set : null
-  set_list        = length(var.set_list) > 0 ? var.set_list : null
-  set_sensitive   = length(var.set_sensitive) > 0 ? var.set_sensitive : null
+  set             = local.set
+  set_list        = var.set_list
+  set_sensitive   = var.set_sensitive
   set_wo          = length(var.set_wo) > 0 ? var.set_wo : null
   set_wo_revision = var.set_wo_revision
 

@@ -208,13 +208,21 @@ The module keeps the v0.10 inputs and the addresses of `helm_release.this`,
    `one(module.x.metadata)` or `module.x.metadata[0]` with `module.x.metadata`.
    `try(one(module.x.metadata), null)` does not fail, it returns `null`.
 
+The first plan after switching shows the namespace move and one in-place
+update of each release, from the Helm provider's state upgrade:
+
+```text
+- postrender      = { args = [], binary_path = "" } -> null
+- set_wo_revision = 1 -> null
++ upgrade_install = false
+```
+
+Applying it upgrades the release to a new revision with the same manifests.
+
 Other changes:
 
 - `set` and `set_sensitive` entries no longer need `type`.
 - `values` is `list(string)` instead of `any`.
-- An empty `kubernetes_namespace_labels` or `kubernetes_namespace_annotations`
-  is sent as `null`, because the Kubernetes provider v3.3 treats an explicit
-  empty map as a change.
 - The module needs Terraform or OpenTofu 1.11 or later.
 
 ## Requirements
